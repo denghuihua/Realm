@@ -11,10 +11,17 @@
 #import "Dog.h"
 #import "Book.h"
 
-/*单次连续写入1000条 642 ms*/
-/*事物单次写入1000条 174 ms*/
-/*单次连续更新1000条 843 ms*/
-/*事物单次更新1000条 82 ms*/
+//realm
+/*单次连续写入10000条 23.8 s*/
+/*事物单次写入10000条 451 ms*/
+/*单次连续读取10000条 6.62ms*/
+/*单次连续更新10000条 339 ms*/
+
+//coreData
+/*单次连续写入10000条 33.2 s*/
+/*事物单次写入10000条 202 ms*/
+/*单次连续读取10000条 18.1ms*/
+/*单次连续更新10000条 339 ms*/
 
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -38,6 +45,8 @@
     
     NSLog(@"并发开始"); //并发 1000 * 1000 条时间 20s
     RLMRealm *realm = [RLMRealm defaultRealm];
+    
+//    [self multiThreadWrite];
    
 }
 
@@ -90,24 +99,25 @@
 - (void)multiThreadWrite{
     //并发写入
     NSLog(@"并发开始"); //并发 1000 * 1000 条时间 20s
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @autoreleasepool{
-            RLMRealm *realm = [RLMRealm defaultRealm];
-            
-            for (NSInteger idx1 = 0; idx1 < 10; idx1++) {
+    for (NSInteger idx1 = 0; idx1 < 100; idx1++) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSLog(@"本任务开始:%zd==%@",idx1,[NSThread currentThread]);
+            @autoreleasepool{
+                RLMRealm *realm = [RLMRealm defaultRealm];
+                //Realm 单条线程写入操作是同步以及阻塞进行的
                 [realm beginWriteTransaction];
-                
+                NSLog(@"transaction写入开始:%zd==%@",idx1,[NSThread currentThread]);
                 for (NSInteger idx2 = 0; idx2 < 1000; idx2++) {
                     [Person createInRealm:realm withValue:@{@"name":@"huahua",@"age":@18,@"date":[NSDate date]}];
                 }
+                NSLog(@"transaction写入结束:%zd==%@",idx1,[NSThread currentThread]);
                 [realm commitWriteTransaction];
-                
                 //                NSLog(@"%@",[[Person allObjects]sortedResultsUsingKeyPath:@"date" ascending:YES]);
                 
             }
-        }
-        NSLog(@"本任务结束");
-    });
+            NSLog(@"本任务结束:%zd",idx1);
+        });
+    }
 }
 
 
@@ -242,36 +252,39 @@
 // 数据排序  支持属性名 键值 键值属性排序  支持连接查询
     RLMResults<Dog *> *sortedDogs = [[Dog objectsWhere:@"name BEGINSWITH 'p'"] sortedResultsUsingKeyPath:@"name" ascending:NO];
     RLMResults<Person *>*dogOwners = [[Person allObjects] sortedResultsUsingKeyPath:@"dog.age" ascending:NO];
+
     
     //自动更新查询结果集  使用枚举enumeration不会自动更新
     RLMRealm *realm = [RLMRealm defaultRealm];
     RLMResults<Dog *> *dogs = [Dog objectsInRealm:realm where:@"age > 2"];
-    NSLog(@"%d",dogs.count);
+    NSLog(@"%zd",dogs.count);
     
     [realm transactionWithBlock:^{
         [Dog createInRealm:realm withValue:@[@"blackHair",@7]]; 
     }];
     
-    NSLog(@"%d",dogs.count);
+    NSLog(@"%zd",dogs.count);
 }
 
 - (void)writeStudy{
     //增 删 改 都需要在事物中执行   查不需要
     NSLog(@"write begin");
     //创建对象三种方式
+    //属性创建
     Dog *dog1 = [[Dog alloc] init];
     dog1.name = @"huahua";
     dog1.age = 3;
     
+    //字典创建
     Dog *dog2 = [[Dog alloc] initWithValue:@{@"name":@"pluto",@"age":@4}];
     
+    //数组创建
     //数组中元素的顺序需要和model中property申明的顺序保持一致
     Dog *dog3 = [[Dog alloc] initWithValue:@[@"pluto2",@2]];
     
     NSLog(@"dog1:%@\n dog2:%@\n dog3:%@",dog1,dog2,dog3);
     
     //嵌套对象创建  对应表关系中 一对多
-    //to do 警告如何消除？已验证可以正常写入
     Person *person1 = [[Person alloc] init];
     person1.name = @"huihuadeng";
     person1.dog = dog1;
@@ -303,7 +316,7 @@
         [persons setValue:@"Earth" forKeyPath:@"name"];
     }];
     
-    //对象含主键 主键如何创建
+    //对象含主键 主键如何创建  不含自增长index，如需要，需要手动创建及维护
     //to do <Dog> <Dog *区别> 
     Book *cheeseBook = [[Book alloc] init];
     cheeseBook.title = @"cheese recipes";

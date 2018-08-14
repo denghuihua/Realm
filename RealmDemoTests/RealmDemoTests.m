@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "PersonService.h"
 
 @interface RealmDemoTests : XCTestCase
 
@@ -29,11 +30,30 @@
     // Use XCTAssert and related functions to verify your tests produce the correct results.
 }
 
-- (void)testPerformanceExample {
+- (void)testInsertPerformanceExample {
     // This is an example of a performance test case.
+    PersonService *db = [[PersonService alloc] init];
     [self measureBlock:^{
-        // Put the code you want to measure the time of here.
+        [db insert];
     }];
 }
+
+- (void)test_PerInsertformanceExample {
+    // This is an example of a performance test case.
+    PersonService *db = [[PersonService alloc] init];
+    [self measureBlock:^{
+        [db perInsert];
+    }];
+}
+
+- (void)test_ReadPerformanceExample {
+    // This is an example of a performance test case.
+    PersonService *db = [[PersonService alloc] init];
+    [self measureBlock:^{
+        [db read];
+    }];
+}
+
+
 
 @end

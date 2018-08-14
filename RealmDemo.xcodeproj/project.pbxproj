@@ -65,6 +65,7 @@
 		4AA65F2C2119748F004A7155 /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		4AA65F2E211974D2004A7155 /* Dog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dog.h; sourceTree = "<group>"; };
 		4AA65F2F211974D2004A7155 /* Dog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Dog.m; sourceTree = "<group>"; };
+		4ACA23382122ECE800CA7AA0 /* RealmDemoTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RealmDemoTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		4AD1118D211ACDCF00412D0D /* Book.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Book.h; sourceTree = "<group>"; };
 		4AD1118E211ACDCF00412D0D /* Book.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Book.m; sourceTree = "<group>"; };
 		6FEDF2C8B5340CB718873661 /* Pods-RealmDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealmDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RealmDemo/Pods-RealmDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -160,6 +161,7 @@
 			children = (
 				4A7EE5E521196CD2006215F8 /* RealmDemoTests.m */,
 				4A7EE5E721196CD2006215F8 /* Info.plist */,
+				4ACA23382122ECE800CA7AA0 /* RealmDemoTests-Bridging-Header.h */,
 			);
 			path = RealmDemoTests;
 			sourceTree = "<group>";
@@ -252,6 +254,7 @@
 					};
 					4A7EE5E021196CD2006215F8 = {
 						CreatedOnToolsVersion = 9.3.1;
+						LastSwiftMigration = 0930;
 						TestTargetID = 4A7EE5C821196CD0006215F8;
 					};
 					4A7EE5EB21196CD2006215F8 = {
@@ -545,6 +548,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4ZSZ9D4473;
 				INFOPLIST_FILE = RealmDemoTests/Info.plist;
@@ -555,6 +559,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = sohu.RealmDemoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RealmDemoTests/RealmDemoTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RealmDemo.app/RealmDemo";
 			};
@@ -564,6 +571,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4ZSZ9D4473;
 				INFOPLIST_FILE = RealmDemoTests/Info.plist;
@@ -574,6 +582,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = sohu.RealmDemoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RealmDemoTests/RealmDemoTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RealmDemo.app/RealmDemo";
 			};

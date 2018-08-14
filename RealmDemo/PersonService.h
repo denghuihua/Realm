@@ -10,5 +10,8 @@
 
 @interface PersonService : NSObject
 
+- (void)insert;
+- (void)perInsert;
+- (void)read;
 
 @end
