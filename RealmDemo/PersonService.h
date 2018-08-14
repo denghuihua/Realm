@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface PersonService : NSObject
 
 - (void)insert;
 - (void)perInsert;
-- (void)read;
+- (id)read;
+- (void)update:(id)result;
 
 @end

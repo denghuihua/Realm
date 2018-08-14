@@ -8,7 +8,6 @@
 
 #import "PersonService.h"
 #import "Person.h"
-#import <Realm/Realm.h>
 
 //Person table
 @implementation PersonService
@@ -46,23 +45,35 @@
 }
 
 //realm 不能够获取前多少前数据  http://www.hangge.com/blog/cache/detail_891.html
-- (void)read{
+- (RLMResults *)read{
     RLMResults<Person *> *tanDogs = [Person objectsWhere:@"name BEGINSWITH 'h'"];
     NSLog(@"count:%zd",tanDogs.count);
+    return tanDogs;
 }
 
-//- (void)update:(RLMResults *)result{
-//    RLMRealm *realm = [RLMRealm defaultRealm];
-//    //    for (int i  = 0; i < 10; i++) {
-//    
-//        [realm transactionWithBlock:^{
-//        
-//          [result ]
-//              person.name = @"xiaoming"
-//               
-//            
-//        }];   
-//}
+- (void)update:(RLMResults *)result{
+    RLMRealm *realm = [RLMRealm defaultRealm];
+    [realm transactionWithBlock:^{
+        for (int i  = 0; i < result.count; i++) {
+            Person *person = [result objectAtIndex:i];
+            person.name = @"result";
+        }
+    }];   
+}
+
+-(void)updateTest{
+    PersonService *db = [[PersonService alloc] init];
+    [db insert];
+    RLMResults *resluts =  [db read];
+    NSDate *beginDate = [NSDate date];
+    for (int i  = 0; i < 10 ;i++) {
+        [db update:resluts];
+    }
+    NSDate *enddate = [NSDate date];
+    CGFloat timeInterval = [enddate timeIntervalSinceDate:beginDate]/10;
+    
+    NSLog(@"%f",timeInterval);
+}
 
 
 

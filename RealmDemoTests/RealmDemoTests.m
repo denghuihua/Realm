@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "PersonService.h"
+#import <Realm/Realm.h>
 
 @interface RealmDemoTests : XCTestCase
 
@@ -51,6 +52,16 @@
     PersonService *db = [[PersonService alloc] init];
     [self measureBlock:^{
         [db read];
+    }];
+}
+
+
+- (void)test_updatePerformanceExample {
+    // This is an example of a performance test case.
+    PersonService *db = [[PersonService alloc] init];
+    RLMResults *resluts =  [db read];
+    [self measureBlock:^{
+        [db update:resluts];
     }];
 }
 

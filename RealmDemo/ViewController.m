@@ -10,18 +10,18 @@
 #import "Person.h"
 #import "Dog.h"
 #import "Book.h"
-
+#import "PersonService.h"
 //realm
 /*单次连续写入10000条 23.8 s*/
 /*事物单次写入10000条 451 ms*/
 /*单次连续读取10000条 6.62ms*/
-/*单次连续更新10000条 339 ms*/
+/*单次单次更新10000条 935 ms*/
 
 //coreData
 /*单次连续写入10000条 33.2 s*/
 /*事物单次写入10000条 202 ms*/
 /*单次连续读取10000条 18.1ms*/
-/*单次连续更新10000条 339 ms*/
+/*单次单次更新10000条 339 ms*/
 
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -47,6 +47,7 @@
     RLMRealm *realm = [RLMRealm defaultRealm];
     
 //    [self multiThreadWrite];
+
    
 }
 
